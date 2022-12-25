@@ -11,7 +11,7 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "https://kevin-chatweb.netlify.app",
     credentials: true,
   })
 );
@@ -26,7 +26,7 @@ mongoose.connect(process.env.MONGO_URL).then(() => {
 //*users
 
 app.get("/", (req, res) => {
-  res.send("hello sda");
+  res.send("Homepage");
 });
 
 app.get("/users", async (req, res) => {
@@ -57,7 +57,7 @@ app.post("/users/create", async (req, res) => {
       password: hashPassword,
     });
 
-    const saveNewUser = await newUser.save();
+    const saveNewUser = await (await newUser).save();
     res.send(saveNewUser);
   } catch (err) {
     res.status(500).send(err);
@@ -69,7 +69,7 @@ app.post("/users/create", async (req, res) => {
 app.post("/conversations/create", async (req, res) => {
   try {
     const newConversation = Conversation.create(req.body);
-    const saveNewConversation = await newConversation.save();
+    const saveNewConversation = await (await newConversation).save();
     res.status(200).json(saveNewConversation);
   } catch (err) {
     res.status(500).send(err);
